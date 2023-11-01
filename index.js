@@ -9,6 +9,8 @@
 
 let stone = null
 let moveCount = 0
+// I want to make this variable, adding additional options to increase the number of stones and calculate the optimal number of moves
+let optimalMoves = Math.pow(2,4)-1;
 
 // this function is called when a row is clicked. 
 // Open your inspector tool to see what is being captured and can be used.
@@ -18,6 +20,7 @@ const selectRow = (row) => {
   console.log("Yay, we clicked an item", row)
   console.log("Here is the stone's id: ", row.id)
   console.log("Here is the stone's data-size: ", currentRow)
+  console.log(optimalMoves)
 
   if(stone === null){
     pickUpStone(row.id)}
@@ -72,6 +75,10 @@ const checkForWin = (rowID) => {
   if((rowID) !== "bottom-row" && 
   document.getElementById(rowID).getElementsByClassName('stone').length == 4){
     alert("You win!!! It took you " + moveCount + " moves!")
+    reset()
   }
 }
 
+function reset(){
+  location.reload()
+}
