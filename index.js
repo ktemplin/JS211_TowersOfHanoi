@@ -31,7 +31,7 @@ const selectRow = (row) => {
 // but there might be something wrong with it...
 const pickUpStone = (rowID) => {
   const selectedRow = document.getElementById(rowID);
-  stone = selectedRow.removeChild(selectedRow.lastChild);
+  stone = selectedRow.removeChild(selectedRow.lastElementChild);
   console.log(stone)
   console.log(rowID)
 }
@@ -40,7 +40,7 @@ const pickUpStone = (rowID) => {
 // Once you figure that out you'll need to figure out if its a legal move...
 // Something like: if(!stone){pickupStone} else{dropStone}
 
-const dropStone = (rowID, stone) => {
+const dropStone = (row, rowID) => {
   if (isLegal(row, rowID)){
     document.getElementById(rowID).appendChild(stone)
     stone = null
@@ -68,11 +68,10 @@ else
 }
 
 // What is a win in Towers of Hanoi? When should this function run?
-const checkForWin = () => {
-  if((stacks['b'].length == 4) || (stacks['c'].length == 4)){
-    return true
-  } else {
-    return false
+const checkForWin = (rowID) => {
+  if((rowID) !== "bottom-row" && 
+  document.getElementById(rowID).getElementsByClassName('stone').length == 4){
+    alert("You win!!! It took you " + moveCount + " moves!")
   }
 }
 
