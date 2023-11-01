@@ -42,19 +42,19 @@ const printStacks = () => {
 
 // Next, what do you think this function should do?
 const movePiece = async (stack1, stack2) => {
-  if (checkForWin()){
-    console.log('You\'ve won!!!')
-    //logic to show number of moves used
-    //logic to show optimal number of moves possible
-    console.log('Press any key to reset game.')
-    await keypress()
-    stacks = {
-      a: [4, 3, 2, 1],
-      b: [],
-      c: []
-    };
-  }
-  else if (isLegal(stack1, stack2)){
+  // if (checkForWin){
+  //   console.log('You\'ve won!!!')
+  //   //logic to show number of moves used
+  //   //logic to show optimal number of moves possible
+  //   console.log('Press any key to reset game.')
+  //   await keypress()
+  //   stacks = {
+  //     a: [4, 3, 2, 1],
+  //     b: [],
+  //     c: []
+  //   };
+  // } else
+  if (isLegal(stack1, stack2)){
     inHand = stacks[stack1].pop()
     stacks[stack2].push(inHand)
   }
@@ -85,6 +85,7 @@ const checkForWin = () => {
 // When is this function called? What should it do with its argument?
 const towersOfHanoi = (startStack, endStack) => {
   movePiece(startStack, endStack);
+  checkForWin();
 }
 
 const getPrompt = () => {
@@ -124,6 +125,15 @@ if (typeof describe === 'function') {
         c: []
       };
       assert.equal(isLegal('a', 'c'), true);
+    });
+    it('should allow a legal move', () => {
+      stacks = {
+        a: [3],
+        b: [],
+        c: [4, 2, 1]
+      };
+      assert.equal(isLegal('c', 'b'), true);
+      assert.equal(isLegal('a', 'b'), true)
     });
     it('should allow move of smaller ring onto larger', () => {
       stacks = {
