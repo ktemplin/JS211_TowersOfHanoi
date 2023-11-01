@@ -7,6 +7,15 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// Added to make a pause upon a successful win
+const keypress = async () => {
+  process.stdin.setRawMode(true)
+  return new Promise(resolve => process.stdin.once('data', () => {
+    process.stdin.setRawMode(false)
+    resolve()
+  }))
+}
+
 // An object that represents the three stacks of Towers of Hanoi; 
   // * each key is an array of Numbers: 
     // * A is the far-left, 
@@ -22,6 +31,8 @@ let stacks = {
   c: []
 };
 
+let inHand
+
 // Start here. What is this function doing?
 const printStacks = () => {
   console.log("a: " + stacks.a);
@@ -30,27 +41,46 @@ const printStacks = () => {
 }
 
 // Next, what do you think this function should do?
-const movePiece = () => {
-  // Your code here
-
+const movePiece = async (stack1, stack2) => {
+  if (checkForWin(true)){
+    console.log('You\'ve won!!!')
+    //logic to show number of moves used
+    //logic to show optimal number of moves possible
+    console.log('Press any key to reset game.')
+    await keypress()
+    stacks = {
+      a: [4, 3, 2, 1],
+      b: [],
+      c: []
+    };
+  }
+  else if (isLegal(stack1, stack2)){
+    inHand = stacks[stack1].pop()
+    stacks[stack2].push(inHand)
+  }
+  else {
+    console.log('Illegal Move! Try again')
+  }
 }
 
 // Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
-const isLegal = () => {
-  // Your code here
+const isLegal = (stack1, stack2) => {
+  const check1 = stacks[stack1].length-1
+  const check2 = stacks[stack2].length
 
+  return check1 < check2 || stacks[stack2].length === 0
 }
 
 // What is a win in Towers of Hanoi? When should this function run?
 const checkForWin = () => {
-  // Your code here
-
+  if(stacks["c"].length === 4){
+    return true
+  }
 }
 
 // When is this function called? What should it do with its argument?
 const towersOfHanoi = (startStack, endStack) => {
-  // Your code here
-
+  movePiece(startStack, endStack);
 }
 
 const getPrompt = () => {
@@ -90,6 +120,14 @@ if (typeof describe === 'function') {
         c: []
       };
       assert.equal(isLegal('a', 'c'), true);
+    });
+    it('should allow move of smaller ring onto larger', () => {
+      stacks = {
+        a: [4, 3],
+        b: [2],
+        c: [1]
+      };
+      assert.equal(isLegal('c','b'), true);
     });
   });
   describe('#checkForWin()', () => {
